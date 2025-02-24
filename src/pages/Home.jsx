@@ -1,20 +1,44 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import "./Home.css";
+import { httpClient } from "../utils/httpClient";
 
 const Home = () => {
   const [recipes, setRecipes] = useState([]);
 
-  useEffect(() => {
-    axios
-      .get("https://dummyjson.com/recipes")
-      .then((response) => {
-        setRecipes(response.data.recipes);
-      })
-      .catch((error) => {
-        console.error("Error fetching recipes:", error);
-      });
-  }, []);
+  const getAllRecipes = async () =>{
+try{
+const response = await httpClient.get("recipes");
+console.log(response)
+}catch(error){
+  console.log(error)
+}
+
+  }
+  const getAllusers = async () =>{
+try{
+const response = await httpClient.get("users");
+console.log(response)
+}catch(error){
+  console.log(error)
+}
+
+  }
+
+  useEffect(() =>{
+    getAllRecipes()
+    getAllusers()
+  },[])
+
+  // useEffect(() => {
+  //   axios
+  //     .get("https://dummyjson.com/recipes")
+  //     .then((response) => {
+  //       setRecipes(response.data.recipes);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching recipes:", error);
+  //     });
+  // }, []);
 
   return (
     <>

@@ -1,47 +1,70 @@
-import React from 'react'
-import './Home.css'
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import "./Home.css";
 
 const Home = () => {
+  const [recipes, setRecipes] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("https://dummyjson.com/recipes")
+      .then((response) => {
+        setRecipes(response.data.recipes);
+      })
+      .catch((error) => {
+        console.error("Error fetching recipes:", error);
+      });
+  }, []);
+
   return (
-    
-   <>
-  <div>
-  <div className="container-fluid p-0">
-    {/* Wallpaper Section */}
-    <div className="wallpaper-section">
-      <img src="https://i.ebayimg.com/images/g/98wAAOSwyeRkh-gn/s-l1600.webp" alt="Wallpaper 1" />
-    </div>
-    {/* Buttons Section */}
-    <div class="container-fluid mt-3">
-            <div class="buttons-section">
-                <button class="btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvas1">Recipe 1</button>
-                <button class="btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvas2">Recipe 2</button>
-                <button class="btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvas3">Recipe 3</button>
-                <button class="btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvas4">Recipe 4</button>
-                <button class="btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvas5">Recipe 5</button>
-                <button class="btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvas6">Recipe 6</button>
-                <button class="btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvas7">Recipe 7</button>
-                <button class="btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvas8">Recipe 8</button>
-                <button class="btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvas9">Recipe 9</button>
-                <button class="btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvas10">Recipe 10</button>
-            </div>
+    <>
+      <div className="container-fluid p-0">
+        {/* Wallpaper Section */}
+        <div className="wallpaper-section">
+          <img
+            src="https://i.ebayimg.com/images/g/98wAAOSwyeRkh-gn/s-l1600.webp"
+            alt="Wallpaper 1"
+          />
         </div>
-  </div>
-  {/* Offcanvas Sections */}
-  <div className="offcanvas offcanvas-end" id="offcanvas1">
-    <div className="offcanvas-header">
-      <h5>Offcanvas 1</h5>
-      <button type="button" className="btn-close" data-bs-dismiss="offcanvas" />
-    </div>
-    <div className="offcanvas-body">Content for offcanvas 1</div>
-  </div>
-</div>
 
-   
-   </>
-    
+        {/* Buttons Section */}
+        <div className="container-fluid mt-3">
+          <div className="buttons-section">
+            {recipes.map((recipe, index) => (
+              <button
+                key={recipe.id}
+                className="btn"
+                data-bs-toggle="offcanvas"
+                data-bs-target={`#offcanvas${recipe.id}`}
+              >
+                {recipe.name}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
 
-  )
-}
+      {/* Offcanvas Sections */}
+      {recipes.map((recipe) => (
+        <div key={recipe.id} className="offcanvas offcanvas-end" id={`offcanvas${recipe.id}`}>
+          <div className="offcanvas-header">
+            <h5>{recipe.name}</h5>
+            <button type="button" className="btn-close" data-bs-dismiss="offcanvas"></button>
+          </div>
+          <div className="offcanvas-body">
+            <p><strong>Ingredients:</strong></p>
+            <ul>
+              {recipe.ingredients.map((ingredient, i) => (
+                <li key={i}>{ingredient}</li>
+              ))}
+            </ul>
+            <p><strong>Instructions:</strong></p>
+            <p>{recipe.instructions}</p>
+          </div>
+        </div>
+      ))}
+    </>
+  );
+};
 
-export default Home
+export default Home;

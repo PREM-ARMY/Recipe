@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = `https://dummyjson.com/`
+const baseUrl = `https://dummyjson.com/recipes`
 
 export const httpClient = axios.create({
     baseURL: baseUrl,
